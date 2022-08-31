@@ -59,3 +59,20 @@ Optional arguments:
 ```bash
 sudo make install
 ```
+
+## Sending requests
+### There are currently 3 endpoints configured.
+**Index (/) [GET]**
+   - Displays information about the server and version number.
+
+**Config (/config) [POST]**
+   - Accepts data in format below to configure printer and server for a single print job. Must be called before the print endpoint can be called. Will be reset after every print job.
+```json
+    {
+        "server": "cups server address",
+        "printer": "printer name"
+    }
+```
+
+**Print (/print) [POST]**
+ - Accepts data in format specified in the **Content-Type** header. This sends the posted data to the configured printer.
