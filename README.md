@@ -54,7 +54,7 @@ Optional arguments:
 --port PORT, -p    PORT  (Web server port number) (default: 9090)
 ```
 
-**To install the program as a service, run the commands below to isntall dependencies and the systemd servicefile**
+**To install the program as a service, run the commands below to install dependencies and the systemd service file**
 
 ```bash
 sudo make install
