@@ -1,0 +1,15 @@
+[Unit]
+Description=CUPS API Web Service
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+User=root
+SyslogIdentifier=cupsAPI
+WorkingDirectory=/opt/vertech/cupsAPI
+ExecStart=/opt/vertech/cupsAPI/env/bin/python -m cupsAPI
+
+[Install]
+WantedBy=multi-user.target
