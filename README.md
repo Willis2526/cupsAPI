@@ -11,7 +11,7 @@ Content-Type headers currently supported:
 
 ## Installation
 ---
->**NOTE**: This has been tested with python 3.5+. and can only be ran on Linux. A Debian based OS is assumed to be used.
+>**NOTE**: This has been tested with python 3.5+ and can only be ran on Linux. A Debian based OS is assumed to be used.
 
 ### Setup Linux environment
 Since pycups is a compiled C program with python bindings, certain development libraries are required to be installed. These programs are listed below. This assumes that a Debian based OS is being used.
