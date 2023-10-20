@@ -3,6 +3,16 @@ from cupsapi.services import BaseService
 import tempfile
 import cups
 
+def get_printers_list(cups_server):
+    """ Get the printer list for a cups server """
+    try:
+        conn = cups.Connection(host=cups_server)
+        printer_list = conn.getPrinters()
+        return {"printers": printer_list, "message": ""}
+    
+    except cups.IPPError as e:
+        return {"printers": [], "message": f"CUPS error: {e}"}
+
 class Printer(BaseService):
     """ The main printer service for dealing with CUPS """
     def __init__(self, printer_name, cups_server="localhost", options={}):

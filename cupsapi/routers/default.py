@@ -16,6 +16,7 @@ class DefaultRouter(BaseRouter):
             "/", self.index, methods=["GET"], include_in_schema=False
         )
         self.router.add_api_route("/print", self.print, methods=["POST"])
+        self.router.add_api_route("/printers", self.list_printers, methods=["GET"])
 
     async def index(self, request: Request):
         # Get the base URL from the request
@@ -33,6 +34,11 @@ class DefaultRouter(BaseRouter):
                     "description": "Submit print jobs with various printing options."
                 },
                 {
+                    "path": f"{base_url}/printers",
+                    "methods": ["GET"],
+                    "description": "View a list of available printers for a given server."
+                },
+                {
                     "path": f"{base_url}/docs",
                     "methods": ["GET"],
                     "description": "Access API documentation for the CupsAPI module."
@@ -40,6 +46,20 @@ class DefaultRouter(BaseRouter):
             ]
         }
         return instructions
+    
+    async def list_printers(self, cups_server: str):
+        """ List the printers on a cups server """
+        result = {"success": False, "message": "", "printers": []}
+
+        printer_response = printer.get_printers_list(cups_server)
+
+        if printer_response["message"]:
+            result["message"] = printer_response["message"]
+            return result
+
+        result["success"] = True
+        result["printers"] = printer_response["printers"]
+        return result
 
     async def print(
         self,

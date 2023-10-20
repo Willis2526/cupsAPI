@@ -78,8 +78,21 @@ The CupsApi module provides the following API endpoints:
 **GET /**
 
     Description: Main endpoint for information and usage instructions.
+
     Method: GET
+
     Usage: Access this endpoint to get instructions on how to interact with the CupsApi module.
+
+**GET /printers**
+
+    Description: View a list of available printers for a given server.
+
+    Method: GET
+
+    Usage: Access this endpoint to get a list of available printers for a cups server.
+
+    Query Parameters:
+        cups_server: The hostname or address for a cups server. The cups server must be accessible to this server.
 
 **POST /print**
 
