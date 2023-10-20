@@ -5,7 +5,7 @@ from fastapi import File, Form, UploadFile
 
 from cupsapi.routers import BaseRouter
 from cupsapi.services import printer
-
+from fastapi import Request
 
 class DefaultRouter(BaseRouter):
     """ The default router for the application. """
@@ -17,11 +17,25 @@ class DefaultRouter(BaseRouter):
         )
         self.router.add_api_route("/print", self.print, methods=["POST"])
 
-    async def index(self):
+    async def index(self, request: Request):
+        # Get the base URL from the request
+        base_url = str(request.base_url)
+        
         instructions = {
             "success": True,
-            "message": "Use one of the endpoints listed to interact.",
-            "endpoints": ["/print"]
+            "message": "You can interact with the CupsAPI module using the following endpoints.",
+            "endpoints": [
+                {
+                    "path": f"{base_url}print",
+                    "methods": ["POST"],
+                    "description": "Submit print jobs with various printing options."
+                },
+                {
+                    "path": f"{base_url}docs",
+                    "methods": ["GET"],
+                    "description": "Access API documentation for the CupsAPI module."
+                }
+            ]
         }
         return instructions
 
@@ -48,6 +62,10 @@ class DefaultRouter(BaseRouter):
             parsed_options
         )
 
+        if not text and not files:
+            result["message"] = "Either files or text must be sent"
+            return result
+
         if files:
             for file in files:
                 file_data = file.file.read()
@@ -61,5 +79,6 @@ class DefaultRouter(BaseRouter):
             return result
 
         result["success"] = True
+        result["message"] = f"Sent to printer {printer_name}"
 
         return result
