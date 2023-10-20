@@ -1,3 +1,4 @@
 pycups
 fastapi
 uvicorn
+python-multipart
