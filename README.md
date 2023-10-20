@@ -34,6 +34,8 @@ make local
 
 **To install the program as a service, run the commands below to install dependencies and the systemd service file**
 
+>**NOTE**: Installing the service file assumes that the project is located under /opt/vertech
+
 ```bash
 sudo make install
 ```
