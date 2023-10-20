@@ -1,6 +1,3 @@
 pycups
-flask
-flask-cors
-reportlab
-requests
-waitress
+fastapi
+uvicorn
