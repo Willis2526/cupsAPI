@@ -19,19 +19,21 @@ class DefaultRouter(BaseRouter):
 
     async def index(self, request: Request):
         # Get the base URL from the request
-        base_url = str(request.base_url)
+        scheme = request.headers.get("x-forwarded-proto") or request.url.scheme
+        hostname = request.headers.get("x-forwarded-host")
+        base_url = f"{scheme}://{hostname}"
         
         instructions = {
             "success": True,
             "message": "You can interact with the CupsAPI module using the following endpoints.",
             "endpoints": [
                 {
-                    "path": f"{base_url}print",
+                    "path": f"{base_url}/print",
                     "methods": ["POST"],
                     "description": "Submit print jobs with various printing options."
                 },
                 {
-                    "path": f"{base_url}docs",
+                    "path": f"{base_url}/docs",
                     "methods": ["GET"],
                     "description": "Access API documentation for the CupsAPI module."
                 }
