@@ -1,2 +1,0 @@
-""" Init """
-from . import server

@@ -1,6 +1,6 @@
 # CUPS API Makefile
 
-PROJECT := cupsAPI
+PROJECT := cupsapi
 SERVICE_LOC := /etc/systemd/system
 
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
