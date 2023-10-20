@@ -51,14 +51,18 @@ class DefaultRouter(BaseRouter):
         """ List the printers on a cups server """
         result = {"success": False, "message": "", "printers": []}
 
-        printer_response = printer.get_printers_list(cups_server)
+        try:
+            printer_response = printer.get_printers_list(cups_server)
 
-        if printer_response["message"]:
-            result["message"] = printer_response["message"]
-            return result
+            if printer_response["message"]:
+                result["message"] = printer_response["message"]
+                return result
 
-        result["success"] = True
-        result["printers"] = printer_response["printers"]
+            result["success"] = True
+            result["printers"] = printer_response["printers"]
+        except Exception as e:
+            result["message"] = str(e)
+
         return result
 
     async def print(
@@ -73,34 +77,38 @@ class DefaultRouter(BaseRouter):
         error = None
 
         try:
-            parsed_options = dict(option.split("=") for option in options)
-        except ValueError:
-            result["message"] = 'Invalid options format. Use "key=value" format.'
-            return result
-        
-        print_job = printer.Printer(
-            printer_name,
-            cups_server,
-            parsed_options
-        )
+            try:
+                parsed_options = dict(option.split("=") for option in options)
+            except ValueError:
+                result["message"] = 'Invalid options format. Use "key=value" format.'
+                return result
+            
+            print_job = printer.Printer(
+                printer_name,
+                cups_server,
+                parsed_options
+            )
 
-        if not text and not files:
-            result["message"] = "Either files or text must be sent"
-            return result
+            if not text and not files:
+                result["message"] = "Either files or text must be sent"
+                return result
 
-        if files:
-            for file in files:
-                file_data = file.file.read()
-                error = print_job.print(file_data=file_data)
+            if files:
+                for file in files:
+                    file_data = file.file.read()
+                    error = print_job.print(file_data=file_data)
 
-        if text:
-            error = print_job.print(text=text)
+            if text:
+                error = print_job.print(text=text)
 
-        if error:
-            result["message"] = error
-            return result
+            if error:
+                result["message"] = error
+                return result
 
-        result["success"] = True
-        result["message"] = f"Sent to printer {printer_name}"
+            result["success"] = True
+            result["message"] = f"Sent to printer {printer_name}"
+            
+        except Exception as e:
+            result["message"] = str(e)
 
         return result
