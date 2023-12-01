@@ -117,6 +117,4 @@ If you encounter issues or errors while using the CupsApi module, make sure to c
 
 The CupsApi module simplifies the process of managing and controlling your printing tasks. By following the instructions outlined in this documentation, you can effectively utilize this module to meet your printing needs.
 
-For any further assistance or questions, please feel free to reach out to our support team.
-
 Enjoy printing with CupsApi!
