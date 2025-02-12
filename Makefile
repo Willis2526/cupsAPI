@@ -49,13 +49,15 @@ endif
 .PHONY: restart
 
 virt:
-	@echo "Creating virtual environment..."
-
-	@python3 -m venv $(ROOT_DIR)/env
-	@$(ROOT_DIR)/env/bin/pip install --upgrade pip
-	@$(ROOT_DIR)/env/bin/pip install -r $(ROOT_DIR)/requirements.txt
-
-	@echo "Environment created."
+	@if [ ! -d "$(ROOT_DIR)/env" ]; then \
+		echo "Creating virtual environment..."; \
+		python3 -m venv $(ROOT_DIR)/env; \
+		$(ROOT_DIR)/env/bin/pip install --upgrade pip; \
+		$(ROOT_DIR)/env/bin/pip install -r $(ROOT_DIR)/requirements.txt; \
+		echo "Environment created."; \
+	else \
+		echo "Virtual environment already exists. Skipping creation."; \
+	fi
 .PHONY: virt
 
 local: virt
