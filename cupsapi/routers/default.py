@@ -1,7 +1,7 @@
 """ The default routes for the application. """
 from typing import Any, List, Optional
 
-from fastapi import File, Form, UploadFile
+from fastapi import File, Form
 
 from cupsapi.routers import BaseRouter
 from cupsapi.services import printer
