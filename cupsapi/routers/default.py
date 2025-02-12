@@ -1,5 +1,5 @@
 """ The default routes for the application. """
-from typing import List
+from typing import Any, List, Optional
 
 from fastapi import File, Form, UploadFile
 
@@ -20,9 +20,17 @@ class DefaultRouter(BaseRouter):
 
     async def index(self, request: Request):
         # Get the base URL from the request
-        scheme = request.headers.get("x-forwarded-proto") or request.url.scheme
-        hostname = request.headers.get("x-forwarded-host")
-        base_url = f"{scheme}://{hostname}"
+        scheme = request.headers.get("x-forwarded-proto", request.url.scheme)
+        hostname = request.headers.get("x-forwarded-host", request.url.hostname)
+        port = request.url.port
+
+        # If x-forwarded-host is missing, fall back to request.base_url
+        if not hostname:
+            base_url = str(request.base_url).rstrip("/")
+        else:
+            base_url = f"{scheme}://{hostname}"
+            if port and port not in [80, 443]:  # Include port if it's not default
+                base_url += f":{port}"
         
         instructions = {
             "success": True,
@@ -69,12 +77,16 @@ class DefaultRouter(BaseRouter):
         self,
         printer_name: str = Form(...),
         cups_server: str = Form(None),
-        options: list = Form([]),
-        text: str = Form(None),
-        files: List[UploadFile] = File(None)
+        options: Optional[List[str]] = Form(None),
+        text: Optional[str] = Form(None),
+        files: Optional[Any] = File(None)
     ):
         result = {"success": False, "message": ""}
         error = None
+
+        # Add in default options
+        if not options or options and options[0] == "":
+            options = ["media=A4", "sides=one-sided"]
 
         try:
             try:
@@ -94,6 +106,9 @@ class DefaultRouter(BaseRouter):
                 return result
 
             if files:
+                if not isinstance(files, list):
+                    files = [files]
+
                 for file in files:
                     file_data = file.file.read()
                     error = print_job.print(file_data=file_data)
