@@ -13,8 +13,8 @@ Since pycups is a compiled C program with python bindings, certain development l
 - gcc
 - make
 - cups
-- cups-devel (libcups2-dev)
-- python3-devel (python3-dev)
+- libcups2-dev
+- python3-dev
 
 Run the command below to update the system
 ```bash
@@ -42,7 +42,7 @@ sudo make install
 
 When installed, program can be ran from the command line:
 ```bash
-python -m cupsAPI {args}
+python -m cupsapi {args}
 ```
 
 By default, the module runs on 0.0.0.0 (all network interfaces) and port 9095.
